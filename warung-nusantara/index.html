@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mountain Table — Kasir Restoran</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green-deep: #1a3320;
+  --green-mid: #2d5a3d;
+  --green-light: #4a8c5c;
+  --green-pale: #e8f3eb;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --white: #ffffff;
+  --glass-bg: rgba(255,255,255,0.75);
+  --glass-border: rgba(255,255,255,0.55);
+  --shadow: 0 4px 32px rgba(26,51,32,0.12);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --font-d: 'Cormorant Garamond', serif;
+  --font-b: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-b);
+  background: var(--green-deep);
+  min-height: 100vh;
+  color: var(--green-deep);
+  background-image:
+    radial-gradient(ellipse at 15% 10%, rgba(74,140,92,0.20) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 80%, rgba(201,168,76,0.12) 0%, transparent 50%);
+}
+
+/* ── LAYOUT ── */
+#app { display: grid; grid-template-columns: 1fr 420px; grid-template-rows: auto 1fr; min-height: 100vh; }
+
+header {
+  grid-column: 1/-1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(26,51,32,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201,168,76,0.25);
+  position: sticky; top: 0; z-index: 100;
+}
+.hbrand { display: flex; align-items: center; gap: 14px; }
+.hlogo {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.htitle { font-family: var(--font-d); font-size: 24px; font-weight: 600; color: #fff; }
+.htitle span { color: var(--gold-light); }
+.hsub { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 1px; }
+#clock { font-size: 13px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+
+.left { padding: 22px 22px 22px 26px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.right {
+  background: rgba(26,51,32,0.68);
+  backdrop-filter: blur(14px);
+  border-left: 1px solid rgba(201,168,76,0.15);
+  padding: 22px 18px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: var(--font-d);
+  font-size: 17px; font-weight: 600; color: var(--green-deep);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title .ico {
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #fff; flex-shrink: 0;
+}
+
+/* ── FORM ELEMENTS ── */
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fg label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--green-mid); }
+.fg input, .fg select,
+input.fi, select.fi {
+  border: 1.5px solid rgba(45,90,61,0.22);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-family: var(--font-b); font-size: 14px; color: var(--green-deep);
+  background: rgba(255,255,255,0.85);
+  outline: none; width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.fg input:focus, .fg select:focus,
+input.fi:focus, select.fi:focus {
+  border-color: var(--green-light);
+  box-shadow: 0 0 0 3px rgba(74,140,92,0.13);
+}
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: var(--font-b); font-size: 13px; font-weight: 600;
+  padding: 9px 18px; border: none; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-green { background: linear-gradient(135deg,var(--green-mid),var(--green-light)); color: #fff; box-shadow: 0 2px 10px rgba(45,90,61,0.28); }
+.btn-green:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(45,90,61,0.38); }
+.btn-gold  { background: linear-gradient(135deg,var(--gold),var(--gold-light)); color: var(--green-deep); box-shadow: 0 2px 10px rgba(201,168,76,0.28); font-weight: 700; }
+.btn-gold:hover  { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.38); }
+.btn-ghost { background: transparent; border: 1.5px solid rgba(45,90,61,0.22); color: var(--green-mid); }
+.btn-ghost:hover { background: var(--green-pale); }
+.btn-danger { background: rgba(220,53,69,0.1); color: #c0392b; border: 1px solid rgba(192,57,43,0.28); }
+.btn-danger:hover { background: rgba(220,53,69,0.18); }
+.btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 7px; }
+.btn-full { width: 100%; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--green-deep); color: #fff;
+  padding: 11px 22px; border-radius: 40px; font-size: 13px; font-weight: 500;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.22);
+  transition: transform 0.28s cubic-bezier(.34,1.56,.64,1);
+  z-index: 9999; white-space: nowrap;
+  border: 1px solid rgba(201,168,76,0.3);
+  pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+#toast.err  { background: #c0392b; border-color: #e74c3c; }
+
+/* ── CUSTOMER CARD ── */
+.cust-select-row { display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
+.cust-select-row select { flex: 1; }
+.cust-link {
+  font-size: 12px; font-weight: 600; color: var(--gold);
+  cursor: pointer; white-space: nowrap; background: none; border: none;
+  font-family: var(--font-b); text-decoration: underline; text-underline-offset: 2px;
+  flex-shrink: 0;
+}
+.cust-link:hover { color: var(--gold-light); }
+
+/* active customer badge */
+.cust-badge {
+  display: none; align-items: center; gap: 8px;
+  padding: 9px 13px;
+  background: var(--green-pale); border: 1px solid rgba(45,90,61,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500; color: var(--green-mid);
+}
+.cust-badge.on { display: flex; }
+.cust-dot { width: 8px; height: 8px; background: var(--green-light); border-radius: 50%; flex-shrink: 0; }
+.cust-badge .cust-clear {
+  margin-left: auto; font-size: 11px; font-weight: 700; color: var(--gold);
+  cursor: pointer; background: none; border: none; font-family: var(--font-b);
+}
+
+/* inline new-customer form */
+#new-cust-form {
+  display: none; flex-direction: column; gap: 10px;
+  padding: 14px; border-radius: var(--radius-sm);
+  background: rgba(232,243,235,0.55);
+  border: 1px dashed rgba(45,90,61,0.22);
+  margin-top: 10px;
+}
+#new-cust-form.open { display: flex; }
+.form-actions { display: flex; gap: 8px; }
+.form-actions .btn { flex: 1; }
+
+/* ── RESTAURANT ── */
+/* reuses .fi select */
+
+/* ── MENU ── */
+.menu-scroll { overflow-x: auto; margin: 0 -22px; padding: 4px 22px 10px; scrollbar-width: thin; scrollbar-color: rgba(45,90,61,0.18) transparent; }
+.menu-scroll::-webkit-scrollbar { height: 4px; }
+.menu-scroll::-webkit-scrollbar-thumb { background: rgba(45,90,61,0.18); border-radius: 4px; }
+.menu-row { display: flex; gap: 12px; width: max-content; }
+
+.mcard {
+  width: 155px; flex-shrink: 0;
+  background: #fff; border-radius: 13px; overflow: hidden;
+  box-shadow: 0 2px 14px rgba(26,51,32,0.08);
+  border: 1px solid rgba(45,90,61,0.07);
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.mcard:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.mcard.sold { opacity: 0.58; }
+.mthumb {
+  width: 100%; height: 96px;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; color: var(--green-light); overflow: hidden;
+}
+.mthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mbody { padding: 9px 11px 11px; }
+.mname { font-size: 12px; font-weight: 600; color: var(--green-deep); line-height: 1.3; margin-bottom: 2px; }
+.mcat  { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--green-light); margin-bottom: 5px; }
+.mprice { font-size: 12px; font-weight: 700; color: var(--gold); margin-bottom: 7px; }
+.badge-sold { display: inline-block; background: rgba(220,53,69,0.1); color: #c0392b; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; margin-bottom: 6px; }
+.madd { width: 100%; padding: 6px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg,var(--green-mid),var(--green-light)); color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+.madd:hover:not(:disabled) { opacity: 0.85; }
+.madd:disabled { opacity: 0.38; cursor: not-allowed; }
+.menu-empty { color: rgba(45,90,61,0.45); font-size: 13px; padding: 10px 0; text-align: center; }
+
+/* ── CART ── */
+.cart-items { display: flex; flex-direction: column; gap: 7px; }
+.ci {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 11px;
+  background: rgba(232,243,235,0.6); border-radius: var(--radius-sm);
+  border: 1px solid rgba(45,90,61,0.1);
+}
+.ci-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--green-deep); }
+.qctrl { display: flex; align-items: center; gap: 5px; }
+.qbtn {
+  width: 24px; height: 24px; border: 1.5px solid rgba(45,90,61,0.22);
+  background: #fff; border-radius: 5px; font-size: 14px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--green-mid); line-height: 1; transition: background 0.12s;
+}
+.qbtn:hover { background: var(--green-pale); }
+.qval { font-size: 13px; font-weight: 700; min-width: 20px; text-align: center; color: var(--green-deep); }
+.csub { font-size: 12px; font-weight: 600; color: var(--gold); min-width: 68px; text-align: right; }
+.cart-empty { text-align: center; padding: 22px 0; color: rgba(45,90,61,0.4); font-size: 13px; }
+
+.cart-sep { height: 1px; background: linear-gradient(90deg,transparent,rgba(45,90,61,0.14),transparent); margin: 14px 0; }
+.total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.total-lbl { font-size: 14px; font-weight: 600; color: var(--green-mid); }
+.total-val { font-family: var(--font-d); font-size: 22px; font-weight: 700; color: var(--green-deep); }
+
+.send-row { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+.send-row input { flex: 1; }
+
+/* ── RIGHT PANEL ── */
+.right-hd {
+  font-family: var(--font-d); font-size: 19px; font-weight: 600; color: #fff;
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+.live-badge {
+  font-family: var(--font-b); font-size: 9px; font-weight: 700;
+  background: rgba(201,168,76,0.18); color: var(--gold-light);
+  padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
+  border: 1px solid rgba(201,168,76,0.28);
+}
+.orders-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.ocard {
+  background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 13px; padding: 14px;
+  transition: background 0.18s;
+}
+.ocard:hover { background: rgba(255,255,255,0.12); }
+.ocard-hd { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.omeja { font-size: 15px; font-weight: 700; color: #fff; }
+.ocust { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.oitems { margin-bottom: 8px; }
+.oir {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: rgba(255,255,255,0.68);
+  padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.oir:last-child { border: none; }
+.ofoot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.ototal { font-family: var(--font-d); font-size: 17px; font-weight: 700; color: var(--gold-light); }
+
+.ssel {
+  border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.09); color: #fff;
+  border-radius: 7px; padding: 5px 9px; font-size: 11px; font-family: var(--font-b); font-weight: 600;
+  outline: none; cursor: pointer;
+}
+.ssel option { background: var(--green-deep); color: #fff; }
+
+.sbadge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.sp { background: rgba(255,193,7,0.14); color: #ffc107; border: 1px solid rgba(255,193,7,0.28); }
+.sc { background: rgba(255,119,48,0.14); color: #ff7730; border: 1px solid rgba(255,119,48,0.28); }
+.sr { background: rgba(74,140,92,0.18); color: #7de89b; border: 1px solid rgba(74,140,92,0.35); }
+.sd { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.42); border: 1px solid rgba(255,255,255,0.12); }
+.orders-empty { text-align: center; padding: 44px 0; color: rgba(255,255,255,0.28); font-size: 13px; }
+.orders-empty .ei { font-size: 34px; margin-bottom: 8px; }
+
+/* ── MISC ── */
+.left::-webkit-scrollbar { width: 4px; }
+.left::-webkit-scrollbar-thumb { background: rgba(45,90,61,0.18); border-radius: 4px; }
+.right::-webkit-scrollbar { width: 4px; }
+.right::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+.dots { display: inline-flex; gap: 4px; align-items: center; }
+.dots span { width: 5px; height: 5px; background: currentColor; border-radius: 50%; animation: blink 1.2s infinite; }
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+@media(max-width:860px){
+  #app{grid-template-columns:1fr}
+  .right{border-left:none;border-top:1px solid rgba(201,168,76,0.15)}
+  .frow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HEADER -->
+<header>
+  <div class="hbrand">
+    <div class="hlogo">🌿</div>
+    <div>
+      <div class="htitle">Mountain <span>Table</span></div>
+      <div class="hsub">Sistem Kasir Restoran</div>
+    </div>
+  </div>
+  <div id="clock"></div>
+</header>
+
+<!-- LEFT -->
+<div class="left">
+
+  <!-- 1. PELANGGAN — always visible, always loaded -->
+  <div class="card">
+    <div class="card-title"><span class="ico">👤</span> Pelanggan</div>
+
+    <!-- badge pelanggan aktif -->
+    <div class="cust-badge" id="cust-badge">
+      <span class="cust-dot"></span>
+      <span id="cust-badge-name">—</span>
+      <button class="cust-clear" onclick="clearCustomer()">Ganti ✕</button>
+    </div>
+
+    <!-- dropdown + link tambah baru -->
+    <div id="cust-picker">
+      <div class="cust-select-row">
+        <select class="fi" id="cust-sel" onchange="onCustSelect()">
+          <option value="">— pilih pelanggan —</option>
+        </select>
+        <button class="cust-link" onclick="toggleNewCustForm()">+ Tambah baru</button>
+      </div>
+
+      <!-- form inline tambah pelanggan -->
+      <div id="new-cust-form">
+        <div class="frow">
+          <div class="fg">
+            <label>Nama</label>
+            <input id="inp-name" type="text" placeholder="cth. Budi Santoso"/>
+          </div>
+          <div class="fg">
+            <label>Nomor HP</label>
+            <input id="inp-phone" type="tel" placeholder="cth. 08123456789"/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-green" onclick="saveNewCustomer()">✓ Simpan</button>
+          <button class="btn btn-ghost" onclick="toggleNewCustForm()">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PILIH RESTORAN -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🏔</span> Pilih Restoran</div>
+    <div class="fg">
+      <label>Restoran</label>
+      <select class="fi" id="resto-sel" onchange="onRestoChange()">
+        <option value="">— Pilih Restoran —</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 3. MENU -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🍽</span> Daftar Menu</div>
+    <div class="menu-scroll">
+      <div class="menu-row" id="menu-row">
+        <div class="menu-empty">Pilih restoran terlebih dahulu</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. KERANJANG -->
+  <div class="card">
+    <div class="card-title"><span class="ico">🛒</span> Keranjang</div>
+    <div class="cart-items" id="cart-items">
+      <div class="cart-empty">Keranjang masih kosong</div>
+    </div>
+    <div id="cart-foot" style="display:none">
+      <div class="cart-sep"></div>
+      <div class="total-row">
+        <span class="total-lbl">Total Pesanan</span>
+        <span class="total-val" id="cart-total">Rp 0</span>
+      </div>
+      <div class="send-row">
+        <input class="fi" id="inp-table" type="text" placeholder="Nomor Meja (cth. 5A)"/>
+        <button class="btn btn-gold" onclick="sendOrder()">🚀 Kirim Pesanan</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="right-hd">🗒 Pesanan Masuk <span class="live-badge">● Live</span></div>
+  <div class="orders-wrap" id="orders-wrap">
+    <div class="orders-empty"><div class="ei">📋</div>Belum ada pesanan masuk</div>
+  </div>
+</div>
+
+</div><!-- #app -->
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc,
+  getDocs, onSnapshot, updateDoc, deleteDoc,
+  serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+/* ── CONFIG ── */
+const app = initializeApp({
+  apiKey: "AIzaSyC_7vSePqi5Fm8Qp3Dx6yf4uZiEO7X3sZA",
+  authDomain: "warung-nusantara-c753e.firebaseapp.com",
+  projectId: "warung-nusantara-c753e",
+  storageBucket: "warung-nusantara-c753e.firebasestorage.app",
+  messagingSenderId: "637143533638",
+  appId: "1:637143533638:web:da317b39e380006338224f"
+});
+const db = getFirestore(app);
+
+/* ── STATE ── */
+let custId   = null, custName = null;
+let restoId  = null;
+let cart     = [];   // [{menuId,menuName,qty,unitPrice}]
+let custs    = [];   // [{id,name,phone}]
+
+/* ── CLOCK ── */
+const clockEl = document.getElementById("clock");
+setInterval(() => {
+  clockEl.textContent = new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+}, 1000);
+
+/* ── TOAST ── */
+function toast(msg, type="ok") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "show" + (type==="err" ? " err" : "");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className="", 3000);
+}
+
+/* ── RUPIAH ── */
+const rp = n => "Rp " + Number(n).toLocaleString("id-ID");
+
+/* ══════════════════════════════════════
+   CUSTOMERS — realtime listener
+   load saat halaman pertama buka,
+   dropdown selalu sinkron dengan Firestore
+══════════════════════════════════════ */
+function listenCustomers() {
+  onSnapshot(collection(db, "customers"), snap => {
+    custs = [];
+    snap.forEach(d => custs.push({ id: d.id, ...d.data() }));
+    custs.sort((a,b) => (a.name||"").localeCompare(b.name||"","id"));
+    buildCustDropdown();
+  }, e => console.error("customers:", e));
+}
+listenCustomers(); // ← dipanggil langsung, tidak bergantung cart
+
+function buildCustDropdown() {
+  const sel = document.getElementById("cust-sel");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">— pilih pelanggan —</option>';
+  custs.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c.id;
+    o.textContent = c.name + (c.phone ? " · " + c.phone : "");
+    sel.appendChild(o);
+  });
+  // kembalikan pilihan sebelumnya jika masih ada
+  if (prev && custs.find(c=>c.id===prev)) sel.value = prev;
+}
+
+window.onCustSelect = function() {
+  const val = document.getElementById("cust-sel").value;
+  if (!val) { clearCustomer(); return; }
+  const c = custs.find(x => x.id === val);
+  if (c) setActiveCust(c.id, c.name);
+};
+
+function setActiveCust(id, name) {
+  custId = id; custName = name;
+  document.getElementById("cust-badge-name").textContent = name;
+  document.getElementById("cust-badge").classList.add("on");
+  document.getElementById("cust-picker").style.display = "none";
+  closeNewCustForm();
+}
+
+window.clearCustomer = function() {
+  custId = null; custName = null;
+  document.getElementById("cust-badge").classList.remove("on");
+  document.getElementById("cust-picker").style.display = "block";
+  document.getElementById("cust-sel").value = "";
+};
+
+/* form tambah pelanggan baru */
+let formOpen = false;
+window.toggleNewCustForm = function() {
+  formOpen ? closeNewCustForm() : openNewCustForm();
+};
+function openNewCustForm() {
+  formOpen = true;
+  document.getElementById("new-cust-form").classList.add("open");
+  document.getElementById("inp-name").focus();
+}
+function closeNewCustForm() {
+  formOpen = false;
+  document.getElementById("new-cust-form").classList.remove("open");
+  document.getElementById("inp-name").value  = "";
+  document.getElementById("inp-phone").value = "";
+}
+
+window.saveNewCustomer = async function() {
+  const name  = document.getElementById("inp-name").value.trim();
+  const phone = document.getElementById("inp-phone").value.trim();
+  if (!name || !phone) { toast("Lengkapi nama dan nomor HP", "err"); return; }
+  try {
+    const ref = await addDoc(collection(db, "customers"), { name, phone, loyaltyPoints: 0 });
+    // onSnapshot akan auto-update dropdown;
+    // langsung set active tanpa tunggu snapshot
+    setActiveCust(ref.id, name);
+    toast("✓ Pelanggan \"" + name + "\" disimpan");
+  } catch(e) {
+    toast("Gagal: " + e.message, "err");
+  }
+};
+
+/* ══════════════════════════════════════
+   RESTAURANTS
+══════════════════════════════════════ */
+async function loadRestos() {
+  try {
+    const snap = await getDocs(collection(db, "restaurants"));
+    const sel  = document.getElementById("resto-sel");
+    snap.forEach(d => {
+      const o = document.createElement("option");
+      o.value = d.id;
+      o.textContent = d.data().name || d.id;
+      sel.appendChild(o);
+    });
+  } catch(e) { console.error("restos:", e); }
+}
+loadRestos();
+
+window.onRestoChange = async function() {
+  restoId = document.getElementById("resto-sel").value || null;
+  cart = []; renderCart();
+  const row = document.getElementById("menu-row");
+  if (!restoId) { row.innerHTML = '<div class="menu-empty">Pilih restoran terlebih dahulu</div>'; return; }
+  row.innerHTML = '<div class="menu-empty"><span class="dots"><span></span><span></span><span></span></span> Memuat menu…</div>';
+  try {
+    const snap = await getDocs(collection(db, "restaurants/" + restoId + "/menus"));
+    if (snap.empty) { row.innerHTML = '<div class="menu-empty">Tidak ada menu</div>'; return; }
+    row.innerHTML = "";
+    snap.forEach(d => row.appendChild(makeMenuCard({ id: d.id, ...d.data() })));
+  } catch(e) { row.innerHTML = '<div class="menu-empty">Gagal memuat</div>'; console.error(e); }
+};
+
+function makeMenuCard(m) {
+  const ok = m.available !== false;
+  const el = document.createElement("div");
+  el.className = "mcard" + (ok ? "" : " sold");
+  const img = m.imageUrl
+    ? '<div class="mthumb"><img src="'+m.imageUrl+'" alt="'+m.name+'" onerror="this.parentNode.innerHTML=\'🍽\'"/></div>'
+    : '<div class="mthumb">🍽</div>';
+  el.innerHTML = img +
+    '<div class="mbody">' +
+      '<div class="mname">'+(m.name||"Menu")+'</div>' +
+      '<div class="mcat">'+(m.category||"")+'</div>' +
+      '<div class="mprice">'+rp(m.price||0)+'</div>' +
+      (!ok ? '<span class="badge-sold">Habis</span>' : '') +
+      '<button class="madd"'+(ok?'':' disabled')+
+        ' onclick="addToCart(\''+m.id+'\',\''+((m.name||"").replace(/'/g,"\\'"))+'\','+(m.price||0)+')">'+
+        '+ Tambah</button>' +
+    '</div>';
+  return el;
+}
+
+/* ══════════════════════════════════════
+   CART
+══════════════════════════════════════ */
+window.addToCart = function(menuId, menuName, unitPrice) {
+  const ex = cart.find(i => i.menuId === menuId);
+  if (ex) ex.qty++; else cart.push({menuId, menuName, qty:1, unitPrice});
+  renderCart();
+  toast("+ " + menuName + " ditambahkan");
+};
+
+window.changeQty = function(menuId, d) {
+  const i = cart.findIndex(x => x.menuId === menuId);
+  if (i < 0) return;
+  cart[i].qty += d;
+  if (cart[i].qty <= 0) cart.splice(i,1);
+  renderCart();
+};
+
+function renderCart() {
+  const wrap   = document.getElementById("cart-items");
+  const foot   = document.getElementById("cart-foot");
+  const totEl  = document.getElementById("cart-total");
+  if (cart.length === 0) {
+    wrap.innerHTML = '<div class="cart-empty">Keranjang masih kosong</div>';
+    foot.style.display = "none";
+    return;
+  }
+  foot.style.display = "block";
+  wrap.innerHTML = "";
+  let total = 0;
+  cart.forEach(item => {
+    const sub = item.qty * item.unitPrice;
+    total += sub;
+    const row = document.createElement("div");
+    row.className = "ci";
+    row.innerHTML =
+      '<span class="ci-name">'+item.menuName+'</span>' +
+      '<div class="qctrl">' +
+        '<button class="qbtn" onclick="changeQty(\''+item.menuId+'\',-1)">−</button>' +
+        '<span class="qval">'+item.qty+'</span>' +
+        '<button class="qbtn" onclick="changeQty(\''+item.menuId+'\',1)">+</button>' +
+      '</div>' +
+      '<span class="csub">'+rp(sub)+'</span>';
+    wrap.appendChild(row);
+  });
+  totEl.textContent = rp(total);
+}
+
+/* ══════════════════════════════════════
+   SEND ORDER
+══════════════════════════════════════ */
+window.sendOrder = async function() {
+  if (!custId)   { toast("Pilih atau tambahkan pelanggan dahulu","err"); return; }
+  if (!restoId)  { toast("Pilih restoran dahulu","err"); return; }
+  if (!cart.length){ toast("Keranjang kosong","err"); return; }
+  const table = document.getElementById("inp-table").value.trim();
+  if (!table) { toast("Isi nomor meja","err"); return; }
+  const total = cart.reduce((s,i)=>s+i.qty*i.unitPrice,0);
+  try {
+    const ref = await addDoc(collection(db,"orders"),{
+      customerId:custId, customerName:custName,
+      restaurantId:restoId, tableNumber:table,
+      status:"pending", totalPrice:total, createdAt:serverTimestamp()
+    });
+    for (const item of cart) {
+      await addDoc(collection(db,"orders/"+ref.id+"/orderItems"),{
+        menuId:item.menuId, menuName:item.menuName,
+        qty:item.qty, unitPrice:item.unitPrice, subtotal:item.qty*item.unitPrice
+      });
+    }
+    cart = []; renderCart();
+    document.getElementById("inp-table").value = "";
+    toast("✓ Pesanan Meja "+table+" berhasil dikirim!");
+  } catch(e){ toast("Gagal: "+e.message,"err"); console.error(e); }
+};
+
+/* ══════════════════════════════════════
+   REALTIME ORDERS
+══════════════════════════════════════ */
+function listenOrders() {
+  const q = query(collection(db,"orders"), orderBy("createdAt","desc"));
+  onSnapshot(q, async snap => {
+    const wrap = document.getElementById("orders-wrap");
+    if (snap.empty) {
+      wrap.innerHTML = '<div class="orders-empty"><div class="ei">📋</div>Belum ada pesanan masuk</div>';
+      return;
+    }
+    wrap.innerHTML = "";
+    for (const ds of snap.docs) {
+      const o = {id:ds.id, ...ds.data()};
+      let items = [];
+      try {
+        const is = await getDocs(collection(db,"orders/"+o.id+"/orderItems"));
+        is.forEach(d => items.push(d.data()));
+      } catch(e){}
+      wrap.appendChild(makeOrderCard(o, items));
+    }
+  }, e => console.error(e));
+}
+listenOrders();
+
+function makeOrderCard(o, items) {
+  const sc = {pending:"sp",cooking:"sc",ready:"sr",done:"sd"}[o.status]||"sp";
+  const sl = {pending:"⏳ Pending",cooking:"🔥 Memasak",ready:"✅ Siap",done:"✔ Selesai"}[o.status]||o.status;
+  const ih = items.length
+    ? items.map(i=>'<div class="oir"><span>'+i.menuName+' ×'+i.qty+'</span><span>'+rp(i.subtotal)+'</span></div>').join("")
+    : '<div class="oir"><span style="opacity:.4">—</span></div>';
+  const time = o.createdAt?.toDate
+    ? o.createdAt.toDate().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}) : "";
+  const el = document.createElement("div");
+  el.className = "ocard";
+  el.innerHTML =
+    '<div class="ocard-hd">'+
+      '<div><div class="omeja">Meja '+( o.tableNumber||"—")+'</div>'+
+      '<div class="ocust">'+(o.customerName||"Pelanggan")+' · '+time+'</div></div>'+
+      '<span class="sbadge '+sc+'">'+sl+'</span>'+
+    '</div>'+
+    '<div class="oitems">'+ih+'</div>'+
+    '<div class="ofoot">'+
+      '<span class="ototal">'+rp(o.totalPrice||0)+'</span>'+
+      '<select class="ssel" onchange="updStatus(\''+o.id+'\',this.value)">'+
+        '<option value="pending"'+(o.status==="pending"?" selected":"")+'>⏳ Pending</option>'+
+        '<option value="cooking"'+(o.status==="cooking"?" selected":"")+'>🔥 Memasak</option>'+
+        '<option value="ready"'  +(o.status==="ready"  ?" selected":"")+'>✅ Siap</option>'+
+        '<option value="done"'   +(o.status==="done"   ?" selected":"")+'>✔ Selesai</option>'+
+      '</select>'+
+      '<button class="btn btn-danger btn-sm" onclick="delOrder(\''+o.id+'\')">🗑 Hapus</button>'+
+    '</div>';
+  return el;
+}
+
+window.updStatus = async (id,s) => {
+  try { await updateDoc(doc(db,"orders",id),{status:s}); toast("Status → "+s); }
+  catch(e){ toast("Gagal","err"); }
+};
+window.delOrder = async id => {
+  if (!confirm("Hapus pesanan ini?")) return;
+  try { await deleteDoc(doc(db,"orders",id)); toast("🗑 Dihapus"); }
+  catch(e){ toast("Gagal","err"); }
+};
+</script>
+</body>
+</html>

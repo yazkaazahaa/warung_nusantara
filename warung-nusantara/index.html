@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mountain Table — Kasir Restoran</title>
+<title>Warung Nusantara — Mountain Restoran</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -320,8 +320,8 @@ input.fi:focus, select.fi:focus {
   <div class="hbrand">
     <div class="hlogo">🌿</div>
     <div>
-      <div class="htitle">Mountain <span>Table</span></div>
-      <div class="hsub">Sistem Kasir Restoran</div>
+      <div class="htitle">Warung<span>Nusantara</span></div>
+      <div class="hsub">Mountain Restoran</div>
     </div>
   </div>
   <div id="clock"></div>
@@ -347,7 +347,7 @@ input.fi:focus, select.fi:focus {
         <select class="fi" id="cust-sel" onchange="onCustSelect()">
           <option value="">— pilih pelanggan —</option>
         </select>
-        <button class="cust-link" onclick="toggleNewCustForm()">+ Tambah baru</button>
+        <button class="cust-link" onclick="toggleNewCustForm()">+ Daftar Pelanggan Baru</button>
       </div>
 
       <!-- form inline tambah pelanggan -->
@@ -372,7 +372,7 @@ input.fi:focus, select.fi:focus {
 
   <!-- 2. PILIH RESTORAN -->
   <div class="card">
-    <div class="card-title"><span class="ico">🏔</span> Pilih Restoran</div>
+    <div class="card-title"><span class="ico">🏔</span> Pilih cabang Restoran</div>
     <div class="fg">
       <label>Restoran</label>
       <select class="fi" id="resto-sel" onchange="onRestoChange()">
@@ -405,7 +405,7 @@ input.fi:focus, select.fi:focus {
       </div>
       <div class="send-row">
         <input class="fi" id="inp-table" type="text" placeholder="Nomor Meja (cth. 5A)"/>
-        <button class="btn btn-gold" onclick="sendOrder()">🚀 Kirim Pesanan</button>
+        <button class="btn btn-gold" onclick="sendOrder()"> Kirim Pesanan</button>
       </div>
     </div>
   </div>

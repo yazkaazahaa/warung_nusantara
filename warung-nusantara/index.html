@@ -703,7 +703,7 @@ listenOrders();
 
 function makeOrderCard(o, items) {
   const sc = {pending:"sp",cooking:"sc",ready:"sr",done:"sd"}[o.status]||"sp";
-  const sl = {pending:"⏳ Pending",cooking:"🔥 Cooking",ready:"✅ Ready",done:"✔ Done"}[o.status]||o.status;
+  const sl = {pending:"⏳ Pending",cooking:"🔥 Memasak",ready:"✅ Siap",done:"✔ Selesai"}[o.status]||o.status;
   const ih = items.length
     ? items.map(i=>'<div class="oir"><span>'+i.menuName+' ×'+i.qty+'</span><span>'+rp(i.subtotal)+'</span></div>').join("")
     : '<div class="oir"><span style="opacity:.4">—</span></div>';
@@ -722,9 +722,9 @@ function makeOrderCard(o, items) {
       '<span class="ototal">'+rp(o.totalPrice||0)+'</span>'+
       '<select class="ssel" onchange="updStatus(\''+o.id+'\',this.value)">'+
         '<option value="pending"'+(o.status==="pending"?" selected":"")+'>⏳ Pending</option>'+
-        '<option value="cooking"'+(o.status==="cooking"?" selected":"")+'>🔥 Cooking</option>'+
-        '<option value="ready"'  +(o.status==="ready"  ?" selected":"")+'>✅ Ready</option>'+
-        '<option value="done"'   +(o.status==="done"   ?" selected":"")+'>✔ Done</option>'+
+        '<option value="cooking"'+(o.status==="cooking"?" selected":"")+'>🔥 Memasak</option>'+
+        '<option value="ready"'  +(o.status==="ready"  ?" selected":"")+'>✅ Siap</option>'+
+        '<option value="done"'   +(o.status==="done"   ?" selected":"")+'>✔ Selesai</option>'+
       '</select>'+
       '<button class="btn btn-danger btn-sm" onclick="delOrder(\''+o.id+'\')">🗑 Hapus</button>'+
     '</div>';
